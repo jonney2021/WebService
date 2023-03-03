@@ -50,8 +50,9 @@ public class EmployeeController {
 
     //update employee
     @PutMapping("/employees/{id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable int id, @RequestBody Employee employee) {
-        return new ResponseEntity<>(employeeService.updateEmployee(id,employee),HttpStatus.OK);
+    public ResponseEntity<Void> updateEmployee(@PathVariable int id, @RequestBody Employee employee) {
+        employeeService.updateEmployee(id,employee);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     //delete employee

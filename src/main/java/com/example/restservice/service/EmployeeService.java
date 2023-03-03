@@ -37,7 +37,7 @@ public interface EmployeeService {
      * @param employee an employee
      * @return  the number of employees
      */
-    int addEmployee(Employee employee);
+    Integer addEmployee(Employee employee);
 
     /**
      *
@@ -45,7 +45,7 @@ public interface EmployeeService {
      * @param employee an employee with that id
      * @return
      */
-    Employee updateEmployee(int id, Employee employee);
+    void updateEmployee(int id, Employee employee);
 
     /**
      *

@@ -28,45 +28,32 @@ public class EmployeeRepository {
     @Autowired
     ModelMapper modelMapper;
 
-    public List<Employee> getAllEmployees(){
-        List<EmployeeEntity> employeeEntityList = jdbcTemplate.query("SELECT * FROM EMPLOYEE",new EmployeeRowMapper());
+    public List<Employee> getAllEmployees() {
+        List<EmployeeEntity> employeeEntityList = jdbcTemplate.query("SELECT * FROM EMPLOYEE", new EmployeeRowMapper());
         List<Employee> employeeResult = new ArrayList<>();
-        for(EmployeeEntity employeeEntity:employeeEntityList){
-//            Employee employee = Employee.builder()
-//                    .id(employeeEntity.getId())
-//                    .name(employeeEntity.getName())
-//                    .postalCode(employeeEntity.getPostalCode())
-//                    .salary(employeeEntity.getSalary())
-//                    .build();
-//            employeeResult.add(employee);
+        for (EmployeeEntity employeeEntity : employeeEntityList) {
             Employee employee = modelMapper.map(employeeEntity, Employee.class);
             employeeResult.add(employee);
         }
         return employeeResult;
     }
 
-    public Employee getEmployeeById(int id){
-        try{
-            EmployeeEntity employeeEntity = jdbcTemplate.queryForObject("SELECT * FROM EMPLOYEE where id = ?",new EmployeeRowMapper(),id);
-//        Employee employee = Employee.builder()
-//                .id(employeeEntity.getId())
-//                .name(employeeEntity.getName())
-//                .postalCode(employeeEntity.getPostalCode())
-//                .salary(employeeEntity.getSalary())
-//                .build();
-            Employee employee = modelMapper.map(employeeEntity,Employee.class);
+    public Employee getEmployeeById(int id) {
+        try {
+            EmployeeEntity employeeEntity = jdbcTemplate.queryForObject("SELECT * FROM EMPLOYEE where id = ?", new EmployeeRowMapper(), id);
+            Employee employee = modelMapper.map(employeeEntity, Employee.class);
             return employee;
-        }catch(EmptyResultDataAccessException exception){
+        } catch (EmptyResultDataAccessException exception) {
             return null;
         }
     }
 
     public Employee getEmployeeByName(String name) {
         String sql = "SELECT * FROM EMPLOYEE where name = ?";
-        try{
-            EmployeeEntity employeeEntity = jdbcTemplate.queryForObject(sql,new EmployeeRowMapper(),name);
-            return modelMapper.map(employeeEntity,Employee.class);
-        }catch(EmptyResultDataAccessException exception){
+        try {
+            EmployeeEntity employeeEntity = jdbcTemplate.queryForObject(sql, new EmployeeRowMapper(), name);
+            return modelMapper.map(employeeEntity, Employee.class);
+        } catch (EmptyResultDataAccessException exception) {
             return null;
         }
     }
@@ -74,21 +61,20 @@ public class EmployeeRepository {
 
     public Integer addEmployee(Employee employee) {
         String sql = "INSERT INTO EMPLOYEE(name, postalCode, salary) VALUES(?,?,?)";
-        jdbcTemplate.update(sql,employee.getName(),employee.getPostalCode(),employee.getSalary());
+        jdbcTemplate.update(sql, employee.getName(), employee.getPostalCode(), employee.getSalary());
 
         //I want to the inserted id in the db
         return jdbcTemplate.queryForObject("SELECT MAX(ID) FROM EMPLOYEE", Integer.class);
     }
 
     public void updateEmployee(int id, Employee employee) {
-        String sql ="UPDATE EMPLOYEE SET NAME=?,postalCode=?, salary=? where id=?";
-        jdbcTemplate.update(sql,employee.getName(),employee.getPostalCode(),employee.getSalary(),id);
+        String sql = "UPDATE EMPLOYEE SET NAME=?,postalCode=?, salary=? where id=?";
+        jdbcTemplate.update(sql, employee.getName(), employee.getPostalCode(), employee.getSalary(), id);
     }
 
     public void deleteEmployee(int id) {
         String sql = "DELETE FROM EMPLOYEE WHERE id=?";
-        jdbcTemplate.update(sql,id);
+        jdbcTemplate.update(sql, id);
     }
-
 
 }

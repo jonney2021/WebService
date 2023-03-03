@@ -36,7 +36,6 @@ public class JokeAdapter {
     }
 
 
-
     public Joke getJoke(String category){
         JokeDTO jokeDTO = restTemplate.getForObject(url, JokeDTO.class,category);
         if(jokeDTO != null){
